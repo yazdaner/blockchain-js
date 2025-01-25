@@ -18,17 +18,21 @@ class Blockchain {
     if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) {
       return false;
     }
+
     for (let i = 1; i < chain.length; i++) {
       const block = chain[i];
       const actualLastHash = chain[i - 1].hash;
 
-      const { timestamp, lastHash, hash, data } = block;
+      const { timestamp, lastHash, hash, data, difficulty, nonce } = block;
 
       if (lastHash !== actualLastHash) return false;
-      if (hash !== cryptoHash(timestamp, lastHash, data)) return false;
+      if (hash !== cryptoHash(timestamp, lastHash, nonce, difficulty, data))
+        return false;
     }
+
     return true;
   }
+
   replaceChain(chain) {
     if (chain.length <= this.chain.length) {
       console.error("the incoming chain must be longer");
