@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node index",
+    "ser": "nodemon index"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,7 @@
   },
   "dependencies": {
     "@types/jest": "^29.5.14",
+    "express": "^4.21.2",
     "hex-to-binary": "^1.0.1"
   }
 }
