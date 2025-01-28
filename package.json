@@ -16,8 +16,10 @@
   },
   "dependencies": {
     "@types/jest": "^29.5.14",
+    "axios": "^1.7.9",
     "express": "^4.21.2",
     "hex-to-binary": "^1.0.1",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "tcp-port-used": "^1.0.2"
   }
 }
