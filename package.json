@@ -21,6 +21,7 @@
     "express": "^4.21.2",
     "hex-to-binary": "^1.0.1",
     "redis": "^4.7.0",
-    "tcp-port-used": "^1.0.2"
+    "tcp-port-used": "^1.0.2",
+    "uuid": "^11.0.5"
   }
 }
