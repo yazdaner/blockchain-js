@@ -53,18 +53,22 @@ app.post("/api/mine", (req, res) => {
 const rootPort = 3000;
 let PORT = 3000;
 
-const syncChains = async () => {
-  const response = await axios.get(`http://localhost:${rootPort}/api/blocks`);
+const syncOnConnect = async () => {
+  let response = await axios.get(`http://localhost:${rootPort}/api/blocks`);
   blockchain.replaceChain(response.data);
+
+  response = await axios.get(
+    `http://localhost:${rootPort}/api/transaction-pool-map`
+  );
+  transactionPool.setMap(response.data);
 };
 
 tcpPortUsed.check(3000, "127.0.0.1").then(function (inUse) {
   if (inUse) {
-    PORT += 1;
-    // PORT += Math.ceil(Math.random() * 1000);
+    PORT += Math.ceil(Math.random() * 1000);
   }
   app.listen(PORT, () => {
     console.log(`listening at localhost:${PORT}`);
-    if (PORT !== rootPort) syncChains();
+    if (PORT !== rootPort) syncOnConnect();
   });
 });
