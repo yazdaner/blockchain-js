@@ -12,10 +12,14 @@ app.use(express.json());
 const blockchain = new Blockchain();
 const transactionPool = new TransactionPool();
 const wallet = new Wallet();
-const pubsub = new Pubsub({ blockchain });
+const pubsub = new Pubsub({ blockchain, transactionPool });
 
 app.get("/api/blocks", (req, res) => {
   res.json(blockchain.chain);
+});
+
+app.get("/api/transaction-pool-map", (req, res) => {
+  res.json(transactionPool.transactionMap);
 });
 
 app.post("/api/transact", (req, res) => {
@@ -34,7 +38,8 @@ app.post("/api/transact", (req, res) => {
     return res.json({ type: "error", message: error.message });
   }
   transactionPool.setTransaction(transaction);
-  console.log("transactionPool", transactionPool);
+  pubsub.broadcastTransaction(transaction);
+
   res.json({ transaction });
 });
 app.post("/api/mine", (req, res) => {
@@ -55,7 +60,8 @@ const syncChains = async () => {
 
 tcpPortUsed.check(3000, "127.0.0.1").then(function (inUse) {
   if (inUse) {
-    PORT += Math.ceil(Math.random() * 1000);
+    PORT += 1;
+    // PORT += Math.ceil(Math.random() * 1000);
   }
   app.listen(PORT, () => {
     console.log(`listening at localhost:${PORT}`);
