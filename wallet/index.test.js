@@ -1,7 +1,7 @@
 const Wallet = require("./index");
-const { verifySignature } = require("../util");
+const { verifySignature } = require("./../util");
 const Transaction = require("./transaction");
-const Blockchain = require("../blockchain");
+const Blockchain = require("./../blockchain");
 const { STARTING_BALANCE } = require("../config");
 
 describe("Wallet", () => {
@@ -67,6 +67,23 @@ describe("Wallet", () => {
       });
       it("outputs the amount the recipient", () => {
         expect(transaction.outputMap[recipient]).toEqual(amount);
+      });
+    });
+
+    describe("and a chain is passed", () => {
+      it("calls `wallet.calculateBalance`", () => {
+        const calculateBalanceMock = jest.fn();
+        const originalCalculateBalance = Wallet.calculateBalance;
+        Wallet.calculateBalance = calculateBalanceMock;
+
+        wallet.createTransaction({
+          recipient: "foo",
+          amount: 10,
+          chain: new Blockchain().chain,
+        });
+
+        expect(calculateBalanceMock).toHaveBeenCalled();
+        Wallet.calculateBalance = originalCalculateBalance;
       });
     });
   });
